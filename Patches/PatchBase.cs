@@ -13,5 +13,7 @@ internal class PatchBase {
 			.Where(type => type.IsSubclassOf(tPatchBase))
 			.Select(type => Activator.CreateInstance(type) as PatchBase)
 			.ToList().ForEach(patch => patch.Init());
+
+		Melon.EasyLog("Patches initialised");
 	}
 }
