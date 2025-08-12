@@ -50,6 +50,10 @@
       <HintPath>_External\UnityExplorer.ML.IL2CPP.CoreCLR.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UniverseLib.ML.IL2CPP.Interop">
+      <HintPath>_External\UniverseLib.ML.IL2CPP.Interop.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>
