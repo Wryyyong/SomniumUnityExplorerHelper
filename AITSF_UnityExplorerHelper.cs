@@ -4,6 +4,7 @@ using UnityEngine;
 
 [assembly: MelonInfo(typeof(UnityExplorer.AITSF_UnityExplorerHelper.Melon),"AITSF_UnityExplorerHelper","1.0.0","Wryyyong")]
 [assembly: MelonGame("SpikeChunsoft","NoSleepForKanameDate")]
+[assembly: VerifyLoaderVersion(0,6,0,true)]
 
 namespace UnityExplorer.AITSF_UnityExplorerHelper;
 
