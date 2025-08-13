@@ -34,6 +34,10 @@
       <HintPath>_External\Assembly-CSharp.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Il2CppCinemachine">
+      <HintPath>_External\Il2CppCinemachine.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Il2Cppmscorlib">
       <HintPath>_External\Il2Cppmscorlib.stripped.dll</HintPath>
       <Private>False</Private>
