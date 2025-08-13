@@ -17,6 +17,7 @@ namespace UnityExplorer.AITSF_UnityExplorerHelper;
 internal class InputBlocker : PatchBase {
 	private static UIManager UiManager;
 	private static bool InputToggle = false;
+	private static bool Override = true;
 
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneLoaded))]
 	[HarmonyPostfix]
@@ -34,11 +35,21 @@ internal class InputBlocker : PatchBase {
 		EvaluateAndToggle();
 	}
 
+	internal static void Update() {
+		if (!(InputToggle && UniverseLib.Input.InputManager.GetKeyDown(Melon.KeyInputBlockerForceToggle.Value))) return;
+
+		Override = !Override;
+		Melon.EasyLog($"ForceToggle triggered, set to {Override}");
+		ToggleInputs(Override);
+	}
+
 	protected static void EvaluateAndToggle() {
 		bool newStatus = UI.UIManager.ShowMenu || FreecamHelper.isFreeCamEnabled;
 
 		if (newStatus == InputToggle) return;
+
 		InputToggle = newStatus;
+		if (newStatus == false) Override = true;
 
 		ToggleInputs(newStatus);
 	}
