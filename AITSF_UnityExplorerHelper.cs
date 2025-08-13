@@ -13,6 +13,7 @@ internal class Melon : MelonMod {
 	internal static MelonPreferences_Category Settings;
 	internal static MelonPreferences_Entry<bool> bLogVerbose;
 	internal static MelonPreferences_Entry<KeyCode> KeyInputBlockerForceToggle;
+	internal static MelonPreferences_Entry<KeyCode> KeyToggleUI;
 
 	internal static void EasyLog(string logMsg) {
 		if (!bLogVerbose.Value) return;
@@ -26,9 +27,13 @@ internal class Melon : MelonMod {
 		Settings = MelonPreferences.CreateCategory("AITSF_UnityExplorerHelper");
 		bLogVerbose = Settings.CreateEntry("LogVerbose",false,"Enable debug mode","Set to true to enable verbose logging");
 		KeyInputBlockerForceToggle = Settings.CreateEntry("KeyInputBlockerForceToggle",KeyCode.F1,"InputBlocker force toggle","The keyboard button to force toggle InputBlocker functionality while either ShowMenu or Freecam are active");
+		KeyToggleUI = Settings.CreateEntry("KeyToggleGameUI",KeyCode.F2,"GameUI toggle","The keyboard button to toggle the GameUI");
 
 		PatchBase.InitAll();
 	}
 
-	public override void OnUpdate() => InputBlocker.Update();
+	public override void OnUpdate() {
+		InputBlocker.Update();
+		ToggleUI.Update();
+	}
 }

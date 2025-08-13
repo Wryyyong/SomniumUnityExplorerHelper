@@ -15,7 +15,7 @@ namespace UnityExplorer.AITSF_UnityExplorerHelper;
 
 [HarmonyPatch]
 internal class InputBlocker : PatchBase {
-	private static UIManager UiManager;
+	internal static UIManager UiManager;
 	private static bool InputToggle = false;
 	private static bool Override = true;
 
