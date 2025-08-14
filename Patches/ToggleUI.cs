@@ -4,7 +4,7 @@ using Il2CppGame;
 
 using UniverseLib.Input;
 
-namespace UnityExplorer.AITSF_UnityExplorerHelper;
+namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch(typeof(UIManager),nameof(UIManager.ShowUI))]
 internal class ToggleUI : PatchBase {
@@ -16,11 +16,11 @@ internal class ToggleUI : PatchBase {
 	}
 
 	internal static void Update() {
-		if (InputBlocker.UiManager == null || !InputManager.GetKeyDown(Melon.KeyToggleUI.Value)) return;
+		if (InputBlocker.UiManager == null || !InputManager.GetKeyDown(SomniumMelon.KeyToggleUI.Value)) return;
 
 		bool newState = !UIEnabled;
 		InputBlocker.UiManager.ShowUI(newState);
 
-		Melon.EasyLog($"UI toggled, new value {newState}");
+		SomniumMelon.EasyLog($"UI toggled, new value {newState}");
 	}
 }

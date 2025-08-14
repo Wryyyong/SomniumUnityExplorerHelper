@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace UnityExplorer.AITSF_UnityExplorerHelper;
+namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 internal class PatchBase {
 	protected virtual void Init() {}
@@ -14,6 +14,6 @@ internal class PatchBase {
 			.Select(type => Activator.CreateInstance(type) as PatchBase)
 			.ToList().ForEach(patch => patch.Init());
 
-		Melon.EasyLog("Patches initialised");
+		SomniumMelon.EasyLog("Patches initialised");
 	}
 }

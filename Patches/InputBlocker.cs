@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-namespace UnityExplorer.AITSF_UnityExplorerHelper;
+namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
 internal class InputBlocker : PatchBase {
@@ -29,17 +29,17 @@ internal class InputBlocker : PatchBase {
 
 		if (tmpUiManager != null) {
 			UiManager = tmpUiManager;
-			Melon.EasyLog($"UIManager Component cached successfully");
+			SomniumMelon.EasyLog($"UIManager Component cached successfully");
 		}
 
 		EvaluateAndToggle();
 	}
 
 	internal static void Update() {
-		if (!(InputToggle && UniverseLib.Input.InputManager.GetKeyDown(Melon.KeyInputBlockerForceToggle.Value))) return;
+		if (!(InputToggle && UniverseLib.Input.InputManager.GetKeyDown(SomniumMelon.KeyInputBlockerForceToggle.Value))) return;
 
 		Override = !Override;
-		Melon.EasyLog($"ForceToggle triggered, set to {Override}");
+		SomniumMelon.EasyLog($"ForceToggle triggered, set to {Override}");
 		ToggleInputs(Override);
 	}
 
@@ -57,7 +57,7 @@ internal class InputBlocker : PatchBase {
 	private static void ToggleInputs(bool doDisable) {
 		foreach (InputDevice device in InputSystem.devices) {
 			device.disabledInRuntime = doDisable;
-			Melon.EasyLog($"Device {device.name}.disabledInRuntime set to {doDisable}");
+			SomniumMelon.EasyLog($"Device {device.name}.disabledInRuntime set to {doDisable}");
 		}
 
 		if (UiManager == null) return;
@@ -65,7 +65,7 @@ internal class InputBlocker : PatchBase {
 		bool doDisableInv = !doDisable;
 
 		UiManager.SetInteractable(doDisableInv);
-		Melon.EasyLog($"UIManager.SetInteractable set to {doDisableInv}");
+		SomniumMelon.EasyLog($"UIManager.SetInteractable set to {doDisableInv}");
 	}
 }
 
@@ -84,10 +84,10 @@ internal static class SceneMonitor {
 
 		if (!newList.Any()) return;
 
-		//Melon.EasyLog($"{scene.name}: {scene.loadingState}, {scene.isLoaded}");
+		//SomniumMelon.EasyLog($"{scene.name}: {scene.loadingState}, {scene.isLoaded}");
 
 		BrainCache.Add(scene,newList);
-		Melon.EasyLog($"{newList.Count} CinemachineBrain components cached for scene {scene.name}");
+		SomniumMelon.EasyLog($"{newList.Count} CinemachineBrain components cached for scene {scene.name}");
 	}
 
 	[HarmonyPatch(nameof(SceneManager.Internal_SceneUnloaded))]
@@ -95,6 +95,6 @@ internal static class SceneMonitor {
 	private static void Internal_SceneUnloaded(Scene scene) {
 		if (!BrainCache.Remove(scene)) return;
 
-		Melon.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
+		SomniumMelon.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
 	}
 }

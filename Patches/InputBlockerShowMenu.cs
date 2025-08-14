@@ -2,7 +2,7 @@
 
 using UnityExplorer.UI;
 
-namespace UnityExplorer.AITSF_UnityExplorerHelper;
+namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch(typeof(UIManager),nameof(UIManager.ShowMenu),MethodType.Setter)]
 internal class InputBlockerShowMenu : InputBlocker {

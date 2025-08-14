@@ -6,7 +6,7 @@ using Il2CppCinemachine;
 
 using UnityExplorer.UI.Panels;
 
-namespace UnityExplorer.AITSF_UnityExplorerHelper;
+namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch(typeof(FreeCamPanel))]
 internal class FreecamHelper : InputBlocker {
@@ -36,7 +36,7 @@ internal class FreecamHelper : InputBlocker {
 		foreach (List<CinemachineBrain> brains in SceneMonitor.BrainCache.Values) {
 			foreach (CinemachineBrain brain in brains) {
 				brain.enabled = enabled;
-				Melon.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
+				SomniumMelon.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
 			}
 		}
 	}
