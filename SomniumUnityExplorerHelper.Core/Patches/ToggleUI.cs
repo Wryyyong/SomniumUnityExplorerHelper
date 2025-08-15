@@ -16,11 +16,11 @@ internal class ToggleUI : PatchBase {
 	}
 
 	internal static void Update() {
-		if (InputBlocker.UiManager == null || !InputManager.GetKeyDown(SomniumMelon.KeyToggleUI.Value)) return;
+		if (InputBlocker.UiManager == null || !InputManager.GetKeyDown(SomniumMelonBase.KeyToggleUI.Value)) return;
 
 		bool newState = !UIEnabled;
 		InputBlocker.UiManager.ShowUI(newState);
 
-		SomniumMelon.EasyLog($"UI toggled, new value {newState}");
+		SomniumMelonBase.EasyLog($"UI toggled, new value {newState}");
 	}
 }
