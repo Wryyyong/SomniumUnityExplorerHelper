@@ -12,6 +12,7 @@ namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 internal class SomniumMelonBase : MelonMod {
 	public const string ModTitle = "SomniumUnityExplorerHelper";
+	public const string ModTarget = null;
 
 	private static MelonLogger.Instance Logger;
 

@@ -1,5 +1,5 @@
 ﻿namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 internal class SomniumMelon : SomniumMelonBase {
-	public const string ModTarget = "NoSleepForKanameDate";
+	public new const string ModTarget = "NoSleepForKanameDate";
 }
