@@ -14,6 +14,7 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <Deterministic>False</Deterministic>
     <WarningLevel>9999</WarningLevel>
+    <DefineConstants>$(DefineConstants);AINS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

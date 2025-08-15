@@ -5,41 +5,55 @@ using HarmonyLib;
 
 using Il2CppCinemachine;
 
-using Il2CppGame;
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+
+using GameSpecificUIManager = Il2CppGame.
+#if AINI
+	GameManager
+#elif AINS
+	UIManager
+#endif
+;
 
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
 internal class InputBlocker : PatchBase {
-	internal static UIManager UiManager;
+	internal static GameSpecificUIManager Manager;
 	private static bool InputToggle = false;
 	private static bool Override = true;
+
+	private const string ManagerParentObject =
+	#if AINI
+		"SomniumController"
+	#elif AINS
+		"GameController"
+	#endif
+	;
 
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneLoaded))]
 	[HarmonyPostfix]
 	private static void Internal_SceneLoaded() {
-		if (UiManager == null) UiManager = null;
+		if (Manager == null) Manager = null;
 
-		UIManager tmpUiManager = null;
-		GameObject.Find("GameController")?.TryGetComponent(out tmpUiManager);
+		GameSpecificUIManager tmpManager = null;
+		GameObject.Find(ManagerParentObject)?.TryGetComponent(out tmpManager);
 
-		if (tmpUiManager != null) {
-			UiManager = tmpUiManager;
-			SomniumMelonBase.EasyLog($"UIManager Component cached successfully");
+		if (tmpManager != null) {
+			Manager = tmpManager;
+			SomniumMelon.EasyLog($"GameSpecificUIManager Component cached successfully");
 		}
 
 		EvaluateAndToggle();
 	}
 
 	internal static void Update() {
-		if (!(InputToggle && UniverseLib.Input.InputManager.GetKeyDown(SomniumMelonBase.KeyInputBlockerForceToggle.Value))) return;
+		if (!(InputToggle && UniverseLib.Input.InputManager.GetKeyDown(SomniumMelon.KeyInputBlockerForceToggle.Value))) return;
 
 		Override = !Override;
-		SomniumMelonBase.EasyLog($"ForceToggle triggered, set to {Override}");
+		SomniumMelon.EasyLog($"ForceToggle triggered, set to {Override}");
 		ToggleInputs(Override);
 	}
 
@@ -57,15 +71,15 @@ internal class InputBlocker : PatchBase {
 	private static void ToggleInputs(bool doDisable) {
 		foreach (InputDevice device in InputSystem.devices) {
 			device.disabledInRuntime = doDisable;
-			SomniumMelonBase.EasyLog($"Device {device.name}.disabledInRuntime set to {doDisable}");
+			SomniumMelon.EasyLog($"Device {device.name}.disabledInRuntime set to {doDisable}");
 		}
 
-		if (UiManager == null) return;
+		if (Manager == null) return;
 
 		bool doDisableInv = !doDisable;
 
-		UiManager.SetInteractable(doDisableInv);
-		SomniumMelonBase.EasyLog($"UIManager.SetInteractable set to {doDisableInv}");
+		Manager.SetInteractable(doDisableInv);
+		SomniumMelon.EasyLog($"Manager.SetInteractable set to {doDisableInv}");
 	}
 }
 
@@ -85,7 +99,7 @@ internal static class SceneMonitor {
 		if (!newList.Any()) return;
 
 		BrainCache.Add(scene,newList);
-		SomniumMelonBase.EasyLog($"{newList.Count} CinemachineBrain components cached for scene {scene.name}");
+		SomniumMelon.EasyLog($"{newList.Count} CinemachineBrain components cached for scene {scene.name}");
 	}
 
 	[HarmonyPatch(nameof(SceneManager.Internal_SceneUnloaded))]
@@ -93,6 +107,6 @@ internal static class SceneMonitor {
 	private static void Internal_SceneUnloaded(Scene scene) {
 		if (!BrainCache.Remove(scene)) return;
 
-		SomniumMelonBase.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
+		SomniumMelon.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
 	}
 }

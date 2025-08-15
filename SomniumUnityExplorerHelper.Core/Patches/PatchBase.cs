@@ -14,6 +14,6 @@ internal class PatchBase {
 			.Select(type => Activator.CreateInstance(type) as PatchBase)
 			.ToList().ForEach(patch => patch.Init());
 
-		SomniumMelonBase.EasyLog("Patches initialised");
+		SomniumMelon.EasyLog("Patches initialised");
 	}
 }

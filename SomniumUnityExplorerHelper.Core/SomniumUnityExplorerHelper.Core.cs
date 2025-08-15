@@ -4,15 +4,23 @@ using UnityEngine;
 
 using UnityExplorer.SomniumUnityExplorerHelper;
 
-[assembly: MelonInfo(typeof(SomniumMelon),SomniumMelonBase.ModTitle,"1.0.0","Wryyyong")]
+[assembly: MelonInfo(typeof(SomniumMelon),SomniumMelon.ModTitle,"1.0.0","Wryyyong")]
 [assembly: MelonGame("SpikeChunsoft",SomniumMelon.ModTarget)]
 [assembly: VerifyLoaderVersion(0,6,0,true)]
 
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
-internal class SomniumMelonBase : MelonMod {
+internal class SomniumMelon : MelonMod {
 	public const string ModTitle = "SomniumUnityExplorerHelper";
-	public const string ModTarget = null;
+	public const string ModTarget =
+	#if AITSF
+		"AI_TheSomniumFiles"
+	#elif AINI
+		"AI_TheSomniumFiles2"
+	#elif AINS
+		"NoSleepForKanameDate"
+	#endif
+	;
 
 	private static MelonLogger.Instance Logger;
 

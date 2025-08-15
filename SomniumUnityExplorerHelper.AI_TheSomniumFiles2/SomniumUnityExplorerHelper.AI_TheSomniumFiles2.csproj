@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <LangVersion>preview</LangVersion>
+    <Configurations>Release</Configurations>
+    <BaseOutputPath>..\bin</BaseOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <IsPublishable>False</IsPublishable>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <Deterministic>False</Deterministic>
+    <WarningLevel>9999</WarningLevel>
+    <DefineConstants>$(DefineConstants);AINI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HarmonyX" Version="2.10.2" />
+    <PackageReference Include="Il2CppInterop.Common" Version="1.5.0" />
+    <PackageReference Include="Il2CppInterop.Generator" Version="1.5.0" />
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.5.0" />
+    <PackageReference Include="LavaGang.MelonLoader" Version="0.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>External\Assembly-CSharp.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2CppCinemachine">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Il2CppCinemachine.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Il2Cppmscorlib.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Unity.InputSystem.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Unity.RenderPipelines.Core.Runtime.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\UnityEngine.CoreModule.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\UnityEngine.UIModule.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityExplorer.ML.IL2CPP.CoreCLR">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\UnityExplorer.ML.IL2CPP.CoreCLR.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UniverseLib.ML.IL2CPP.Interop">
+      <HintPath>..\SomniumUnityExplorerHelper.Core\External\UniverseLib.ML.IL2CPP.Interop.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Import Project="..\SomniumUnityExplorerHelper.Core\SomniumUnityExplorerHelper.Core.projitems" Label="Shared" />
+
+</Project>

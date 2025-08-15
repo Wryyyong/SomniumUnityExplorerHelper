@@ -38,7 +38,7 @@ internal class ToggleUI : PatchBase {
 	}
 
 	private static void RecacheComponents() {
-		SomniumMelonBase.EasyLog($"ToggleUI: Recaching components");
+		SomniumMelon.EasyLog($"ToggleUI: Recaching components");
 
 		Switch(false);
 		ComponentCache.Clear();
@@ -70,15 +70,15 @@ internal class ToggleUI : PatchBase {
 		if (!(HideUI && Test && ComponentCache.ContainsKey(__instance))) return;
 
 		ComponentCache[__instance] = __0;
-		SomniumMelonBase.EasyLog($"{__instance.name} tried to {__0}");
+		SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
 		__0 = false;
 	}
 
 	internal static void Update() {
-		if (!InputManager.GetKeyDown(SomniumMelonBase.KeyToggleUI.Value)) return;
+		if (!InputManager.GetKeyDown(SomniumMelon.KeyToggleUI.Value)) return;
 
 		HideUI = !HideUI;
-		SomniumMelonBase.EasyLog($"UI toggled, new value {HideUI}");
+		SomniumMelon.EasyLog($"UI toggled, new value {HideUI}");
 
 		Switch(HideUI);
 	}

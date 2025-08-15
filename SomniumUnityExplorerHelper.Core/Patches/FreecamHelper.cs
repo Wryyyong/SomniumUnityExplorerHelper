@@ -36,7 +36,7 @@ internal class FreecamHelper : InputBlocker {
 		foreach (List<CinemachineBrain> brains in SceneMonitor.BrainCache.Values) {
 			foreach (CinemachineBrain brain in brains) {
 				brain.enabled = enabled;
-				SomniumMelonBase.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
+				SomniumMelon.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
 			}
 		}
 	}
