@@ -4,23 +4,14 @@ using UnityEngine;
 
 using UnityExplorer.SomniumUnityExplorerHelper;
 
-[assembly: MelonInfo(typeof(SomniumMelon),SomniumMelon.ModTitle,"1.0.0","Wryyyong")]
+[assembly: MelonInfo(typeof(SomniumMelon),SomniumMelonBase.ModTitle,"1.0.0","Wryyyong")]
 [assembly: MelonGame("SpikeChunsoft",SomniumMelon.ModTarget)]
 [assembly: VerifyLoaderVersion(0,6,0,true)]
 
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
-internal class SomniumMelon : MelonMod {
+internal class SomniumMelonBase : MelonMod {
 	public const string ModTitle = "SomniumUnityExplorerHelper";
-	public const string ModTarget =
-	#if AITSF
-		"AI_TheSomniumFiles"
-	#elif AINI
-		"AI_TheSomniumFiles2"
-	#elif AINS
-		"NoSleepForKanameDate"
-	#endif
-	;
 
 	private static MelonLogger.Instance Logger;
 
@@ -38,7 +29,7 @@ internal class SomniumMelon : MelonMod {
 	public override void OnInitializeMelon() {
 		Logger = LoggerInstance;
 
-		Settings = MelonPreferences.CreateCategory("SomniumUnityExplorerHelper");
+		Settings = MelonPreferences.CreateCategory(ModTitle);
 		bLogVerbose = Settings.CreateEntry("LogVerbose",false,"Enable debug mode","Set to true to enable verbose logging");
 		KeyInputBlockerForceToggle = Settings.CreateEntry("KeyInputBlockerForceToggle",KeyCode.F1,"InputBlocker force toggle","The keyboard button to force toggle InputBlocker functionality while either ShowMenu or Freecam are active");
 		KeyToggleUI = Settings.CreateEntry("KeyToggleGameUI",KeyCode.F2,"GameUI toggle","The keyboard button to toggle the GameUI");

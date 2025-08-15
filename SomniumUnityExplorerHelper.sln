@@ -3,20 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36310.24
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomniumUnityExplorerHelper", "SomniumUnityExplorerHelper.csproj", "{E794CAC4-54BB-4DA0-A4B9-134CD033924D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SomniumUnityExplorerHelper.NoSleepForKanameDate", "SomniumUnityExplorerHelper.NoSleepForKanameDate\SomniumUnityExplorerHelper.NoSleepForKanameDate.csproj", "{1AC3014F-ACBB-4AFB-BFDE-1587375C4DB1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SomniumUnityExplorerHelper.Core", "SomniumUnityExplorerHelper.Core\SomniumUnityExplorerHelper.Core.shproj", "{40ED36ED-85C1-4485-B4EC-49DF1C547E56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		AINS|Any CPU = AINS|Any CPU
+		NoSleepForKanameDate|Any CPU = NoSleepForKanameDate|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E794CAC4-54BB-4DA0-A4B9-134CD033924D}.AINS|Any CPU.ActiveCfg = AINS|Any CPU
-		{E794CAC4-54BB-4DA0-A4B9-134CD033924D}.AINS|Any CPU.Build.0 = AINS|Any CPU
+		{1AC3014F-ACBB-4AFB-BFDE-1587375C4DB1}.NoSleepForKanameDate|Any CPU.ActiveCfg = Release|Any CPU
+		{1AC3014F-ACBB-4AFB-BFDE-1587375C4DB1}.NoSleepForKanameDate|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBAE2F9E-D084-4A36-B945-19EC6C8EC451}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SomniumUnityExplorerHelper.Core\SomniumUnityExplorerHelper.Core.projitems*{1ac3014f-acbb-4afb-bfde-1587375c4db1}*SharedItemsImports = 5
+		SomniumUnityExplorerHelper.Core\SomniumUnityExplorerHelper.Core.projitems*{40ed36ed-85c1-4485-b4ec-49df1c547e56}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

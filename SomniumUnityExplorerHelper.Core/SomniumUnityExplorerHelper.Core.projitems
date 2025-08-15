@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>40ed36ed-85c1-4485-b4ec-49df1c547e56</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SomniumUnityExplorerHelper.Core</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Patches\FreecamHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patches\InputBlocker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patches\InputBlockerShowMenu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patches\PatchBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SomniumUnityExplorerHelper.Core.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Patches\ToggleUI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Patches\" />
+  </ItemGroup>
+</Project>
