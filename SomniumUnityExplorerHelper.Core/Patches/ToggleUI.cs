@@ -1,34 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
-using HarmonyLib;
-
-using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 using UniverseLib.Input;
 
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
-internal class ToggleUI : PatchBase {
+internal static class ToggleUI {
 	private static bool HideUI = false;
-	private static bool Test = true;
-	private static Dictionary<Behaviour,bool> ComponentCache = [];
+	private static bool AllowCaching = true;
+	private static readonly Dictionary<Behaviour,bool> ComponentCache = [];
 	private static readonly Dictionary<string,bool> ComponentGameObjectBlacklist = new() {
 		{"VolumeWinkPsync",true},
 	};
 
 	private static void Switch(bool newState) {
-		Test = false;
+		AllowCaching = false;
 
-		if (newState)
-			foreach (Behaviour behaviour in ComponentCache.Keys) behaviour.enabled = false;
-		else
-			foreach (Behaviour behaviour in ComponentCache.Keys) behaviour.enabled = ComponentCache[behaviour];
+		foreach (Behaviour behaviour in ComponentCache.Keys)
+			behaviour.enabled = !newState && ComponentCache[behaviour];
 
-		Test = true;
+		AllowCaching = true;
 	}
 
 	private static void ComponentAdd(Behaviour behaviour) {
@@ -37,41 +33,45 @@ internal class ToggleUI : PatchBase {
 		ComponentCache.Add(behaviour,behaviour.enabled);
 	}
 
-	private static void RecacheComponents() {
-		SomniumMelon.EasyLog($"ToggleUI: Recaching components");
-
-		Switch(false);
-		ComponentCache.Clear();
-
-		GameObject.Find("Volume")?.GetComponentsInChildren<Volume>(true).ToList().ForEach(static behaviour => ComponentAdd(behaviour));
-		GameObject.Find("Canvas2")?.GetComponentsInChildren<Canvas>(true).ToList().ForEach(static behaviour => ComponentAdd(behaviour));
-
-		Canvas cursor = GameObject.Find("cursorpointer Variant")?.GetComponent<Canvas>();
-		if (cursor != null) ComponentAdd(cursor);
-
-		if (!HideUI) return;
-		Switch(true);
-	}
-
 	[HarmonyPatch(typeof(SceneManager))]
-	class SceneManagerPatches {
-		[HarmonyPatch(nameof(SceneManager.Internal_SceneLoaded))]
-		[HarmonyPostfix]
-		private static void Internal_SceneLoaded() => RecacheComponents();
+	internal static class SceneManagerPatches {
+		private const string nameLoaded = nameof(SceneManager.Internal_SceneLoaded);
+		private const string nameUnloaded = nameof(SceneManager.Internal_SceneUnloaded);
 
-		[HarmonyPatch(nameof(SceneManager.Internal_SceneUnloaded))]
-		[HarmonyPostfix]
-		private static void Internal_SceneUnloaded() => RecacheComponents();
+		private static IEnumerable<MethodBase> TargetMethods() {
+			Type type = typeof(SceneManager);
+
+			yield return AccessTools.Method(type,nameLoaded);
+			yield return AccessTools.Method(type,nameUnloaded);
+		}
+
+		private static void Postfix() {
+			SomniumMelon.EasyLog($"ToggleUI: Recaching components");
+
+			Switch(false);
+			ComponentCache.Clear();
+
+			GameObject.Find("Volume")?.GetComponentsInChildren<Volume>(true).ToList().ForEach(static behaviour => ComponentAdd(behaviour));
+			GameObject.Find("Canvas2")?.GetComponentsInChildren<Canvas>(true).ToList().ForEach(static behaviour => ComponentAdd(behaviour));
+
+			Canvas cursor = GameObject.Find("cursorpointer Variant")?.GetComponent<Canvas>();
+			if (cursor != null) ComponentAdd(cursor);
+
+			if (!HideUI) return;
+			Switch(true);
+		}
 	}
 
 	[HarmonyPatch(typeof(Behaviour),nameof(Behaviour.enabled),MethodType.Setter)]
 	[HarmonyPrefix]
-	private static void BehaviourEnabled(Behaviour __instance,ref bool __0) {
-		if (!(HideUI && Test && ComponentCache.ContainsKey(__instance))) return;
+	private static bool BehaviourEnabled(Behaviour __instance,bool __0) {
+		if (!(AllowCaching && ComponentCache.ContainsKey(__instance)))
+			return true;
 
 		ComponentCache[__instance] = __0;
-		SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
-		__0 = false;
+		if (HideUI) SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
+
+		return !HideUI;
 	}
 
 	internal static void Update() {

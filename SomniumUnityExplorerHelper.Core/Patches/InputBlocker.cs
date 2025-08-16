@@ -1,13 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using UnityEngine.InputSystem;
 
-using HarmonyLib;
-
-using Il2CppCinemachine;
-
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using UnityExplorer.UI;
 
 using GameSpecificUIManager = Il2CppGame.
 #if AINI
@@ -20,7 +13,7 @@ using GameSpecificUIManager = Il2CppGame.
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
-internal class InputBlocker : PatchBase {
+internal static class InputBlocker {
 	internal static GameSpecificUIManager Manager;
 	private static bool InputToggle = false;
 	private static bool Override = true;
@@ -57,8 +50,10 @@ internal class InputBlocker : PatchBase {
 		ToggleInputs(Override);
 	}
 
-	protected static void EvaluateAndToggle() {
-		bool newStatus = UI.UIManager.ShowMenu || FreecamHelper.isFreeCamEnabled;
+	[HarmonyPatch(typeof(UIManager),nameof(UIManager.ShowMenu),MethodType.Setter)]
+	[HarmonyPostfix]
+	internal static void EvaluateAndToggle() {
+		bool newStatus = UIManager.ShowMenu || FreecamHelper.IsFreeCamEnabled;
 
 		if (newStatus == InputToggle) return;
 
@@ -80,33 +75,5 @@ internal class InputBlocker : PatchBase {
 
 		Manager.SetInteractable(doDisableInv);
 		SomniumMelon.EasyLog($"Manager.SetInteractable set to {doDisableInv}");
-	}
-}
-
-[HarmonyPatch(typeof(SceneManager))]
-internal static class SceneMonitor {
-	internal static Dictionary<Scene,List<CinemachineBrain>> BrainCache = [];
-
-	[HarmonyPatch(nameof(SceneManager.Internal_SceneLoaded))]
-	[HarmonyPostfix]
-	private static void Internal_SceneLoaded(Scene scene) {
-		List<CinemachineBrain> newList = [];
-
-		foreach (GameObject obj in scene.GetRootGameObjects())
-			foreach (CinemachineBrain brain in obj.GetComponentsInChildren<CinemachineBrain>(true))
-				newList.Add(brain);
-
-		if (!newList.Any()) return;
-
-		BrainCache.Add(scene,newList);
-		SomniumMelon.EasyLog($"{newList.Count} CinemachineBrain components cached for scene {scene.name}");
-	}
-
-	[HarmonyPatch(nameof(SceneManager.Internal_SceneUnloaded))]
-	[HarmonyPostfix]
-	private static void Internal_SceneUnloaded(Scene scene) {
-		if (!BrainCache.Remove(scene)) return;
-
-		SomniumMelon.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
 	}
 }
