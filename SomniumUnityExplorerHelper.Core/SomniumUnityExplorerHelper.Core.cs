@@ -1,6 +1,9 @@
-using MelonLoader;
+global using HarmonyLib;
 
-using UnityEngine;
+global using UnityEngine;
+global using UnityEngine.SceneManagement;
+
+using MelonLoader;
 
 using UnityExplorer.SomniumUnityExplorerHelper;
 
@@ -25,12 +28,12 @@ internal class SomniumMelon : MelonMod {
 	private static MelonLogger.Instance Logger;
 
 	internal static MelonPreferences_Category Settings;
-	internal static MelonPreferences_Entry<bool> bLogVerbose;
+	internal static MelonPreferences_Entry<bool> LogVerbose;
 	internal static MelonPreferences_Entry<KeyCode> KeyInputBlockerForceToggle;
 	internal static MelonPreferences_Entry<KeyCode> KeyToggleUI;
 
 	internal static void EasyLog(string logMsg) {
-		if (!bLogVerbose.Value) return;
+		if (!LogVerbose.Value) return;
 
 		Logger.Msg(logMsg);
 	}
@@ -39,11 +42,9 @@ internal class SomniumMelon : MelonMod {
 		Logger = LoggerInstance;
 
 		Settings = MelonPreferences.CreateCategory(ModTitle);
-		bLogVerbose = Settings.CreateEntry("LogVerbose",false,"Enable debug mode","Set to true to enable verbose logging");
+		LogVerbose = Settings.CreateEntry("LogVerbose",false,"Enable debug mode","Set to true to enable verbose logging");
 		KeyInputBlockerForceToggle = Settings.CreateEntry("KeyInputBlockerForceToggle",KeyCode.F1,"InputBlocker force toggle","The keyboard button to force toggle InputBlocker functionality while either ShowMenu or Freecam are active");
 		KeyToggleUI = Settings.CreateEntry("KeyToggleGameUI",KeyCode.F2,"GameUI toggle","The keyboard button to toggle the GameUI");
-
-		PatchBase.InitAll();
 	}
 
 	public override void OnUpdate() {

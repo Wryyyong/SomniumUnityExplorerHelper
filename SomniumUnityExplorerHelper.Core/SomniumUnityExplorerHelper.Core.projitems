@@ -11,8 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Patches\FreecamHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patches\InputBlocker.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Patches\InputBlockerShowMenu.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Patches\PatchBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SomniumUnityExplorerHelper.Core.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patches\ToggleUI.cs" />
   </ItemGroup>
