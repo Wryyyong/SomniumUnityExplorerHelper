@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -11,46 +10,38 @@ namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
 internal static class FreecamHelper {
+	private const string NameBegin = nameof(FreeCamPanel.BeginFreecam);
+	private const string NameEnd = nameof(FreeCamPanel.EndFreecam);
 	internal static bool IsFreeCamEnabled = false;
 
-	[HarmonyPatch(typeof(FreeCamPanel))]
-	internal static class FreecamPatches {
-		private const string nameBegin = nameof(FreeCamPanel.BeginFreecam);
-		private const string nameEnd = nameof(FreeCamPanel.EndFreecam);
+	[HarmonyPatch(typeof(FreeCamPanel),NameBegin)]
+	[HarmonyPatch(typeof(FreeCamPanel),NameEnd)]
+	[HarmonyPostfix]
+	private static void FreeCamToggle(MethodBase __originalMethod) {
+		bool newState;
 
-		private static IEnumerable<MethodBase> TargetMethods() {
-			Type type = typeof(FreeCamPanel);
+		switch (__originalMethod.Name) {
+			case NameBegin:
+				newState = true;
+				break;
 
-			yield return AccessTools.Method(type,nameBegin);
-			yield return AccessTools.Method(type,nameEnd);
+			case NameEnd:
+				newState = false;
+				break;
+
+			default:
+				return;
 		}
 
-		private static void Postfix(MethodBase __originalMethod) {
-			bool newState;
+		IsFreeCamEnabled = newState;
+		InputBlocker.EvaluateAndToggle();
 
-			switch (__originalMethod.Name) {
-				case nameBegin:
-					newState = true;
-					break;
+		bool enabled = !IsFreeCamEnabled;
 
-				case nameEnd:
-					newState = false;
-					break;
-
-				default:
-					return;
-			}
-
-			IsFreeCamEnabled = newState;
-			InputBlocker.EvaluateAndToggle();
-
-			bool enabled = !IsFreeCamEnabled;
-
-			foreach (List<CinemachineBrain> brains in SceneMonitor.BrainCache.Values) {
-				foreach (CinemachineBrain brain in brains) {
-					brain.enabled = enabled;
-					SomniumMelon.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
-				}
+		foreach (List<CinemachineBrain> brains in SceneMonitor.BrainCache.Values) {
+			foreach (CinemachineBrain brain in brains) {
+				brain.enabled = enabled;
+				SomniumMelon.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
 			}
 		}
 	}
