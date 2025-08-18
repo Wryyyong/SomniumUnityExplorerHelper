@@ -31,27 +31,27 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2CppCinemachine">
-      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Il2CppCinemachine.stripped.dll</HintPath>
+      <HintPath>External\Il2CppCinemachine.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Il2Cppmscorlib.stripped.dll</HintPath>
+      <HintPath>External\Il2Cppmscorlib.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.InputSystem">
-      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Unity.InputSystem.stripped.dll</HintPath>
+      <HintPath>External\Unity.InputSystem.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>..\SomniumUnityExplorerHelper.Core\External\Unity.RenderPipelines.Core.Runtime.stripped.dll</HintPath>
+      <HintPath>External\Unity.RenderPipelines.Core.Runtime.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\SomniumUnityExplorerHelper.Core\External\UnityEngine.CoreModule.stripped.dll</HintPath>
+      <HintPath>External\UnityEngine.CoreModule.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>..\SomniumUnityExplorerHelper.Core\External\UnityEngine.UIModule.stripped.dll</HintPath>
+      <HintPath>External\UnityEngine.UIModule.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityExplorer.ML.IL2CPP.CoreCLR">
