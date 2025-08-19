@@ -11,9 +11,11 @@ namespace UnityExplorer.SomniumUnityExplorerHelper;
 internal static class ToggleUI {
 	private static bool HideUI = false;
 	private static bool AllowCaching = true;
+	private static readonly Vector3 EmptyVector3 = new(0f,0f,0f);
+
 	private static readonly Dictionary<Canvas,bool> CacheCanvas = [];
-	private static readonly Dictionary<Volume,float> CacheVolume = [];
-	private static readonly Dictionary<RectTransform,Dictionary<bool,Vector3>> CacheRectTransform = [];
+	private static readonly Dictionary<Transform,Vector3> CacheTransform = [];
+	private static readonly List<VolumeComponent> CacheVolumeComponent = [];
 
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneLoaded))]
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneUnloaded))]
@@ -24,39 +26,49 @@ internal static class ToggleUI {
 		Switch(false);
 
 		CacheCanvas.Clear();
-		CacheVolume.Clear();
-		CacheRectTransform.Clear();
+		CacheTransform.Clear();
+		CacheVolumeComponent.Clear();
+
+		static void AddCanvas(Canvas canvas) => CacheCanvas.Add(canvas,canvas.enabled);
+		static void AddTransform(Transform transform) => CacheTransform.Add(transform,transform.localScale);
+		static void AddVolumeComponent(VolumeComponent volumeComponent) => CacheVolumeComponent.Add(volumeComponent);
 
 		GameObject.Find("cursorpointer Variant")?
 			.GetComponents<Canvas>().ToList()
-			.ForEach(static cursor => CacheCanvas.Add(cursor,cursor.enabled));
-
-		GameObject.Find("Volume")?
-			.GetComponentsInChildren<Volume>(true).ToList()
-			.ForEach(static volume => CacheVolume.Add(volume,volume.weight));
+			.ForEach(AddCanvas);
 
 		GameObject.Find("Canvas2")?
 			.GetComponentsInChildren<RectTransform>(true).ToList()
-			.ForEach(static transform => CacheRectTransform.Add(transform,new() {
-				{true,new Vector3(0,0,0)},
-				{false,transform.localScale},
-			}));
+			.ForEach(AddTransform);
+
+		#if AINS
+		GameObject.Find("TargetRoot")?
+			.GetComponentsInChildren<Transform>(true).ToList()
+			.ForEach(AddTransform);
+		#endif
+
+		GameObject.Find("Volume")?
+			.GetComponentsInChildren<Volume>(true).ToList()
+			.ForEach(static volume => volume.profile?.components?
+				.ForEach((Il2CppSystem.Action<VolumeComponent>)AddVolumeComponent)
+			);
 
 		if (!HideUI) return;
 		Switch(true);
 	}
 
 	private static void Switch(bool newState) {
+		bool newStateInv = !newState;
 		AllowCaching = false;
 
-		foreach (Canvas canvas in CacheCanvas.Keys)
-			canvas.enabled = !newState && CacheCanvas[canvas];
+		foreach (KeyValuePair<Canvas,bool> canvas in CacheCanvas)
+			canvas.Key.enabled = newStateInv && canvas.Value;
 
-		foreach (Volume volume in CacheVolume.Keys)
-			volume.weight = newState ? 0f : CacheVolume[volume];
+		foreach (KeyValuePair<Transform,Vector3> transform in CacheTransform)
+			transform.Key.localScale = newState ? EmptyVector3 : transform.Value;
 
-		foreach (RectTransform transform in CacheRectTransform.Keys)
-			transform.localScale = CacheRectTransform[transform][newState];
+		foreach (VolumeComponent vComp in CacheVolumeComponent)
+			vComp.active = newStateInv;
 
 		AllowCaching = true;
 	}
@@ -73,25 +85,13 @@ internal static class ToggleUI {
 		return !HideUI;
 	}
 
-	[HarmonyPatch(typeof(Volume),nameof(Volume.weight),MethodType.Setter)]
-	[HarmonyPrefix]
-	private static bool UpdateVolume(Volume __instance,ref float __0) {
-		if (!(AllowCaching && CacheVolume.ContainsKey(__instance)))
-			return true;
-
-		CacheVolume[__instance] = __0;
-		if (HideUI) SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
-
-		return !HideUI;
-	}
-
 	[HarmonyPatch(typeof(Transform),nameof(Transform.localScale),MethodType.Setter)]
 	[HarmonyPrefix]
-	private static bool UpdateRectTransform(RectTransform __instance,ref Vector3 __0) {
-		if (!(AllowCaching && CacheRectTransform.ContainsKey(__instance)))
+	private static bool UpdateTransform(Transform __instance,ref Vector3 __0) {
+		if (!(AllowCaching && CacheTransform.ContainsKey(__instance)))
 			return true;
 
-		CacheRectTransform[__instance][false] = __0;
+		CacheTransform[__instance] = __0;
 		if (HideUI) SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
 
 		return !HideUI;
