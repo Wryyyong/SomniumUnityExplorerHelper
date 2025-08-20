@@ -46,9 +46,16 @@
       <HintPath>External\Unity.RenderPipelines.Core.Runtime.stripped.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>External\Unity.TextMeshPro.stripped.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>External\UnityEngine.CoreModule.stripped.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>External\UnityEngine.UI.stripped.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>External\UnityEngine.UIModule.stripped.dll</HintPath>
