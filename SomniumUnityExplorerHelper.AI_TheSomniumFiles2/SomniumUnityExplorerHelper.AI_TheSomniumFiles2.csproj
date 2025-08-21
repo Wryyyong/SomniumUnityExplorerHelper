@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>External\UnityEngine.UI.stripped.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
       <HintPath>External\UnityEngine.UIModule.stripped.dll</HintPath>
