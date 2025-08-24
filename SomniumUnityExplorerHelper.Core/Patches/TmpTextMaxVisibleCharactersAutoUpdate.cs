@@ -9,6 +9,8 @@ internal static class TmpTextMaxVisibleCharactersAutoUpdate {
 	private static readonly Regex regex = new(@"<+.*?>+",RegexOptions.Compiled);
 
 	private static void Postfix(TMP_Text __instance,string __0) {
+		if (__0 == null) return;
+
 		string useText = __0;
 
 		if (__instance.richText)
