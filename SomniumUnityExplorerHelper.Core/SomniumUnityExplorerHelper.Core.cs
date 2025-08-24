@@ -13,7 +13,7 @@ using UnityExplorer.SomniumUnityExplorerHelper;
 
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
-internal class SomniumMelon : MelonMod {
+class SomniumMelon : MelonMod {
 	public const string ModTitle = "SomniumUnityExplorerHelper";
 	public const string ModTarget =
 	#if AITSF
@@ -25,7 +25,7 @@ internal class SomniumMelon : MelonMod {
 	#endif
 	;
 
-	private static MelonLogger.Instance Logger;
+	static MelonLogger.Instance Logger;
 
 	internal static MelonPreferences_Category Settings;
 	internal static MelonPreferences_Entry<bool> LogVerbose;

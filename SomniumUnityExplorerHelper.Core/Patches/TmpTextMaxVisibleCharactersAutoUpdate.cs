@@ -5,10 +5,10 @@ using Il2CppTMPro;
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch(typeof(TMP_Text),nameof(TMP_Text.text),MethodType.Setter)]
-internal static class TmpTextMaxVisibleCharactersAutoUpdate {
-	private static readonly Regex regex = new(@"<+.*?>+",RegexOptions.Compiled);
+static class TmpTextMaxVisibleCharactersAutoUpdate {
+	static readonly Regex regex = new(@"<+.*?>+",RegexOptions.Compiled);
 
-	private static void Postfix(TMP_Text __instance,string __0) {
+	static void Postfix(TMP_Text __instance,string __0) {
 		if (__0 == null) return;
 
 		string useText = __0;

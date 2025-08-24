@@ -8,19 +8,28 @@ using UniverseLib.Input;
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
-internal static class ToggleUI {
-	private static bool HideUI = false;
-	private static bool AllowCaching = true;
-	private static readonly Vector3 EmptyVector3 = new(0f,0f,0f);
+static class ToggleUI {
+	static bool HideUI = false;
+	static bool AllowCaching = true;
+	static readonly Vector3 EmptyVector3 = new(0f,0f,0f);
 
-	private static readonly Dictionary<Canvas,bool> CacheCanvas = [];
-	private static readonly Dictionary<Transform,Vector3> CacheTransform = [];
-	private static readonly List<VolumeComponent> CacheVolumeComponent = [];
+	static readonly Dictionary<Canvas,bool> CacheCanvas = [];
+	static readonly Dictionary<Transform,Vector3> CacheTransform = [];
+	static readonly List<VolumeComponent> CacheVolumeComponent = [];
+
+	static void AddCanvas(Canvas canvas) =>
+		CacheCanvas.Add(canvas,canvas.enabled);
+
+	static void AddTransform(Transform transform) =>
+		CacheTransform.Add(transform,transform.localScale);
+
+	static void AddVolumeComponent(VolumeComponent volumeComponent) =>
+		CacheVolumeComponent.Add(volumeComponent);
 
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneLoaded))]
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneUnloaded))]
 	[HarmonyPostfix]
-	private static void Recache() {
+	static void Recache() {
 		SomniumMelon.EasyLog($"ToggleUI: Recaching components");
 
 		Switch(false);
@@ -28,10 +37,6 @@ internal static class ToggleUI {
 		CacheCanvas.Clear();
 		CacheTransform.Clear();
 		CacheVolumeComponent.Clear();
-
-		static void AddCanvas(Canvas canvas) => CacheCanvas.Add(canvas,canvas.enabled);
-		static void AddTransform(Transform transform) => CacheTransform.Add(transform,transform.localScale);
-		static void AddVolumeComponent(VolumeComponent volumeComponent) => CacheVolumeComponent.Add(volumeComponent);
 
 		GameObject.Find("cursorpointer Variant")?
 			.GetComponents<Canvas>().ToList()
@@ -57,7 +62,7 @@ internal static class ToggleUI {
 		Switch(true);
 	}
 
-	private static void Switch(bool newState) {
+	static void Switch(bool newState) {
 		bool newStateInv = !newState;
 		AllowCaching = false;
 
@@ -75,7 +80,7 @@ internal static class ToggleUI {
 
 	[HarmonyPatch(typeof(Behaviour),nameof(Behaviour.enabled),MethodType.Setter)]
 	[HarmonyPrefix]
-	private static bool UpdateCanvas(Canvas __instance,ref bool __0) {
+	static bool UpdateCanvas(Canvas __instance,ref bool __0) {
 		if (!(AllowCaching && CacheCanvas.ContainsKey(__instance)))
 			return true;
 
@@ -87,7 +92,7 @@ internal static class ToggleUI {
 
 	[HarmonyPatch(typeof(Transform),nameof(Transform.localScale),MethodType.Setter)]
 	[HarmonyPrefix]
-	private static bool UpdateTransform(Transform __instance,ref Vector3 __0) {
+	static bool UpdateTransform(Transform __instance,ref Vector3 __0) {
 		if (!(AllowCaching && CacheTransform.ContainsKey(__instance)))
 			return true;
 

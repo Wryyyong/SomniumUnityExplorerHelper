@@ -13,12 +13,12 @@ using GameSpecificUIManager = Il2CppGame.
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
-internal static class InputBlocker {
-	internal static GameSpecificUIManager Manager;
-	private static bool InputToggle = false;
-	private static bool Override = true;
+static class InputBlocker {
+	static GameSpecificUIManager Manager;
+	static bool InputToggle = false;
+	static bool Override = true;
 
-	private const string ManagerParentObject =
+	const string ManagerParentObject =
 	#if AINI
 		"SomniumController"
 	#elif AINS
@@ -28,7 +28,7 @@ internal static class InputBlocker {
 
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneLoaded))]
 	[HarmonyPostfix]
-	private static void Internal_SceneLoaded() {
+	static void Internal_SceneLoaded() {
 		if (Manager == null) Manager = null;
 
 		GameSpecificUIManager tmpManager = null;
@@ -63,7 +63,7 @@ internal static class InputBlocker {
 		ToggleInputs(newStatus);
 	}
 
-	private static void ToggleInputs(bool doDisable) {
+	static void ToggleInputs(bool doDisable) {
 		foreach (InputDevice device in InputSystem.devices) {
 			device.disabledInRuntime = doDisable;
 			SomniumMelon.EasyLog($"Device {device.name}.disabledInRuntime set to {doDisable}");

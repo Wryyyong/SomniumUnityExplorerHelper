@@ -9,15 +9,15 @@ using UnityExplorer.UI.Panels;
 namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
-internal static class FreecamHelper {
-	private const string NameBegin = nameof(FreeCamPanel.BeginFreecam);
-	private const string NameEnd = nameof(FreeCamPanel.EndFreecam);
+static class FreecamHelper {
+	const string NameBegin = nameof(FreeCamPanel.BeginFreecam);
+	const string NameEnd = nameof(FreeCamPanel.EndFreecam);
 	internal static bool IsFreeCamEnabled = false;
 
 	[HarmonyPatch(typeof(FreeCamPanel),NameBegin)]
 	[HarmonyPatch(typeof(FreeCamPanel),NameEnd)]
 	[HarmonyPostfix]
-	private static void FreeCamToggle(MethodBase __originalMethod) {
+	static void FreeCamToggle(MethodBase __originalMethod) {
 		bool newState;
 
 		switch (__originalMethod.Name) {
@@ -47,12 +47,12 @@ internal static class FreecamHelper {
 	}
 
 	[HarmonyPatch(typeof(SceneManager))]
-	internal static class SceneMonitor {
+	static class SceneMonitor {
 		internal static Dictionary<Scene,List<CinemachineBrain>> BrainCache = [];
 
 		[HarmonyPatch(nameof(SceneManager.Internal_SceneLoaded))]
 		[HarmonyPostfix]
-		private static void Internal_SceneLoaded(Scene scene) {
+		static void Internal_SceneLoaded(Scene scene) {
 			List<CinemachineBrain> newList = [];
 
 			foreach (GameObject obj in scene.GetRootGameObjects())
@@ -67,7 +67,7 @@ internal static class FreecamHelper {
 
 		[HarmonyPatch(nameof(SceneManager.Internal_SceneUnloaded))]
 		[HarmonyPostfix]
-		private static void Internal_SceneUnloaded(Scene scene) {
+		static void Internal_SceneUnloaded(Scene scene) {
 			if (!BrainCache.Remove(scene)) return;
 
 			SomniumMelon.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
