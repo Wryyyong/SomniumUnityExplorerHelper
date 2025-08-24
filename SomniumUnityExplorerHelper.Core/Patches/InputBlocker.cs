@@ -1,5 +1,6 @@
 using UnityEngine.InputSystem;
 
+using InputManager = UniverseLib.Input.InputManager;
 using UnityExplorer.UI;
 
 using GameSpecificUIManager = Il2CppGame.
@@ -20,30 +21,25 @@ static class InputBlocker {
 
 	const string ManagerParentObject =
 	#if AINI
-		"SomniumController"
+		"Somnium"
 	#elif AINS
-		"GameController"
+		"Game"
 	#endif
-	;
+	+ "Controller";
 
 	[HarmonyPatch(typeof(SceneManager),nameof(SceneManager.Internal_SceneLoaded))]
 	[HarmonyPostfix]
 	static void Internal_SceneLoaded() {
-		if (Manager == null) Manager = null;
+		GameObject.Find(ManagerParentObject)?.TryGetComponent(out Manager);
 
-		GameSpecificUIManager tmpManager = null;
-		GameObject.Find(ManagerParentObject)?.TryGetComponent(out tmpManager);
-
-		if (tmpManager != null) {
-			Manager = tmpManager;
+		if (Manager != null)
 			SomniumMelon.EasyLog($"GameSpecificUIManager Component cached successfully");
-		}
 
 		EvaluateAndToggle();
 	}
 
 	internal static void Update() {
-		if (!(InputToggle && UniverseLib.Input.InputManager.GetKeyDown(SomniumMelon.KeyInputBlockerForceToggle.Value))) return;
+		if (!(InputToggle && InputManager.GetKeyDown(SomniumMelon.KeyInputBlockerForceToggle.Value))) return;
 
 		Override = !Override;
 		SomniumMelon.EasyLog($"ForceToggle triggered, set to {Override}");
@@ -56,9 +52,10 @@ static class InputBlocker {
 		bool newStatus = UIManager.ShowMenu || FreecamHelper.IsFreeCamEnabled;
 
 		if (newStatus == InputToggle) return;
-
 		InputToggle = newStatus;
-		if (newStatus == false) Override = true;
+
+		if (newStatus == false)
+			Override = true;
 
 		ToggleInputs(newStatus);
 	}
