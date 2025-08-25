@@ -79,25 +79,36 @@ static class ToggleUI {
 	}
 
 	[HarmonyPatch(typeof(Behaviour),nameof(Behaviour.enabled),MethodType.Setter)]
-	[HarmonyPrefix]
-	static bool UpdateCanvas(Canvas __instance,ref bool __0) {
-		if (!(AllowCaching && CacheCanvas.ContainsKey(__instance)))
-			return true;
-
-		CacheCanvas[__instance] = __0;
-		if (HideUI) SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
-
-		return !HideUI;
-	}
-
 	[HarmonyPatch(typeof(Transform),nameof(Transform.localScale),MethodType.Setter)]
 	[HarmonyPrefix]
-	static bool UpdateTransform(Transform __instance,ref Vector3 __0) {
-		if (!(AllowCaching && CacheTransform.ContainsKey(__instance)))
+	static bool UpdateComponent(Component __instance,ref dynamic __0) {
+		if (!AllowCaching)
 			return true;
 
-		CacheTransform[__instance] = __0;
-		if (HideUI) SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
+		dynamic instCast,targetCache;
+
+		switch (__instance) {
+			case Canvas:
+				instCast = (Canvas)__instance;
+				targetCache = CacheCanvas;
+				break;
+
+			case Transform:
+				instCast = (Transform)__instance;
+				targetCache = CacheTransform;
+				break;
+
+			default:
+				return true;
+		}
+
+		if (!targetCache.ContainsKey(instCast))
+			return true;
+
+		targetCache[instCast] = __0;
+
+		if (HideUI)
+			SomniumMelon.EasyLog($"{__instance.name} tried to {__0}");
 
 		return !HideUI;
 	}
