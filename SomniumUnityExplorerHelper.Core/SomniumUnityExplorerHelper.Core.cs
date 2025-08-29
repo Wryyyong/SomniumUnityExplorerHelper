@@ -42,9 +42,27 @@ class SomniumMelon : MelonMod {
 		Logger = LoggerInstance;
 
 		Settings = MelonPreferences.CreateCategory(ModTitle);
-		LogVerbose = Settings.CreateEntry("LogVerbose",false,"Enable debug mode","Set to true to enable verbose logging");
-		KeyInputBlockerForceToggle = Settings.CreateEntry("KeyInputBlockerForceToggle",KeyCode.F1,"InputBlocker force toggle","The keyboard button to force toggle InputBlocker functionality while either ShowMenu or Freecam are active");
-		KeyToggleUI = Settings.CreateEntry("KeyToggleGameUI",KeyCode.F2,"GameUI toggle","The keyboard button to toggle the GameUI");
+
+		LogVerbose = Settings.CreateEntry(
+			"LogVerbose",
+			false,
+			"Enable debug mode",
+			"Set to true to enable verbose logging"
+		);
+
+		KeyInputBlockerForceToggle = Settings.CreateEntry(
+			"KeyInputBlockerForceToggle",
+			KeyCode.F3,
+			"InputBlocker force toggle",
+			"The keyboard button to force toggle InputBlocker functionality while either ShowMenu or Freecam are active"
+		);
+
+		KeyToggleUI = Settings.CreateEntry(
+			"KeyToggleUI",
+			KeyCode.F4,
+			"UI toggle",
+			"The keyboard button to toggle the in-game UI"
+		);
 	}
 
 	public override void OnUpdate() {
