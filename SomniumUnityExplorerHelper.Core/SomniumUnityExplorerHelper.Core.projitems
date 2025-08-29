@@ -12,7 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Patches\FreecamHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patches\InputBlocker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patches\TmpTextMaxVisibleCharactersAutoUpdate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SomniumUnityExplorerHelper.Core.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SomniumMelon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patches\ToggleUI.cs" />
   </ItemGroup>
 </Project>
