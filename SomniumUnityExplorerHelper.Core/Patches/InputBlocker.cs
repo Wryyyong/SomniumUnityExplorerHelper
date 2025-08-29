@@ -15,6 +15,13 @@ namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
 static class InputBlocker {
+	static readonly MelonPreferences_Entry<KeyCode> KeyInputBlockerForceToggle = SomniumMelon.Settings.CreateEntry(
+		"KeyInputBlockerForceToggle",
+		KeyCode.F3,
+		"InputBlocker force toggle",
+		"The keyboard button to force toggle InputBlocker functionality while either ShowMenu or Freecam are active"
+	);
+
 	static GameSpecificUIManager Manager;
 	static bool InputToggle = false;
 	static bool Override = true;
@@ -39,7 +46,7 @@ static class InputBlocker {
 	}
 
 	internal static void Update() {
-		if (!(InputToggle && InputManager.GetKeyDown(SomniumMelon.KeyInputBlockerForceToggle.Value))) return;
+		if (!(InputToggle && InputManager.GetKeyDown(KeyInputBlockerForceToggle.Value))) return;
 
 		Override = !Override;
 		SomniumMelon.EasyLog($"ForceToggle triggered, set to {Override}");

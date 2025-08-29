@@ -9,6 +9,13 @@ namespace UnityExplorer.SomniumUnityExplorerHelper;
 
 [HarmonyPatch]
 static class ToggleUI {
+	static readonly MelonPreferences_Entry<KeyCode> KeyToggleUI = SomniumMelon.Settings.CreateEntry(
+		"KeyToggleUI",
+		KeyCode.F4,
+		"UI toggle",
+		"The keyboard button to toggle the in-game UI"
+	);
+
 	static bool HideUI = false;
 	static bool AllowCaching = true;
 	static readonly Vector3 EmptyVector3 = new(0f,0f,0f);
@@ -114,7 +121,7 @@ static class ToggleUI {
 	}
 
 	internal static void Update() {
-		if (!InputManager.GetKeyDown(SomniumMelon.KeyToggleUI.Value)) return;
+		if (!InputManager.GetKeyDown(KeyToggleUI.Value)) return;
 
 		HideUI = !HideUI;
 		SomniumMelon.EasyLog($"UI toggled, new value {HideUI}");
