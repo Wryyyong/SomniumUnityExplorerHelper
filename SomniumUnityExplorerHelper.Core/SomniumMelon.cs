@@ -7,7 +7,7 @@ global using UnityEngine.SceneManagement;
 
 using UnityExplorer.SomniumUnityExplorerHelper;
 
-[assembly: MelonInfo(typeof(SomniumMelon),SomniumMelon.ModTitle,"1.0.0","Wryyyong")]
+[assembly: MelonInfo(typeof(SomniumMelon),SomniumMelon.ModTitle,"1.1.0","Wryyyong")]
 [assembly: MelonGame("SpikeChunsoft",SomniumMelon.ModTarget)]
 [assembly: VerifyLoaderVersion(0,6,0,true)]
 
