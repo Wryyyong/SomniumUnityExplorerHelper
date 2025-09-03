@@ -14,6 +14,8 @@ static class FreecamHelper {
 	const string NameEnd = nameof(FreeCamPanel.EndFreecam);
 	internal static bool IsFreeCamEnabled = false;
 
+	static readonly Dictionary<Scene,List<CinemachineBrain>> Cache = [];
+
 	[HarmonyPatch(typeof(FreeCamPanel),NameBegin)]
 	[HarmonyPatch(typeof(FreeCamPanel),NameEnd)]
 	[HarmonyPostfix]
@@ -38,7 +40,7 @@ static class FreecamHelper {
 
 		bool enabled = !IsFreeCamEnabled;
 
-		foreach (List<CinemachineBrain> brains in SceneMonitor.BrainCache.Values) {
+		foreach (List<CinemachineBrain> brains in Cache.Values) {
 			foreach (CinemachineBrain brain in brains) {
 				brain.enabled = enabled;
 				SomniumMelon.EasyLog($"{brain.tag}.CinemachineBrain.enabled set to {enabled}");
@@ -48,8 +50,6 @@ static class FreecamHelper {
 
 	[HarmonyPatch(typeof(SceneManager))]
 	static class SceneMonitor {
-		internal static Dictionary<Scene,List<CinemachineBrain>> BrainCache = [];
-
 		[HarmonyPatch(nameof(SceneManager.Internal_SceneLoaded))]
 		[HarmonyPostfix]
 		static void Internal_SceneLoaded(Scene scene) {
@@ -61,14 +61,14 @@ static class FreecamHelper {
 
 			if (!newList.Any()) return;
 
-			BrainCache.Add(scene,newList);
+			Cache.Add(scene,newList);
 			SomniumMelon.EasyLog($"{newList.Count} CinemachineBrain components cached for scene {scene.name}");
 		}
 
 		[HarmonyPatch(nameof(SceneManager.Internal_SceneUnloaded))]
 		[HarmonyPostfix]
 		static void Internal_SceneUnloaded(Scene scene) {
-			if (!BrainCache.Remove(scene)) return;
+			if (!Cache.Remove(scene)) return;
 
 			SomniumMelon.EasyLog($"CinemachineBrain compoments uncached for scene {scene.name}");
 		}
