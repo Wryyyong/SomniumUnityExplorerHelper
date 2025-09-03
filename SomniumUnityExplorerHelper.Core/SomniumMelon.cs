@@ -25,9 +25,10 @@ class SomniumMelon : MelonMod {
 	#endif
 	;
 
+	static MelonLogger.Instance Logger;
+
 	internal static MelonPreferences_Category Settings = MelonPreferences.CreateCategory(ModTitle);
 
-	static MelonLogger.Instance Logger;
 	static readonly MelonPreferences_Entry<bool> LogVerbose = Settings.CreateEntry(
 		"LogVerbose",
 		false,
@@ -35,10 +36,14 @@ class SomniumMelon : MelonMod {
 		"Set to true to enable verbose logging"
 	);
 
-	internal static void EasyLog(string logMsg) {
+	internal static void EasyLog(params string[] logMsgs) {
 		if (!LogVerbose.Value) return;
 
-		Logger.Msg(logMsg);
+		foreach (string msg in logMsgs) {
+			if (string.IsNullOrWhiteSpace(msg)) continue;
+
+			Logger.Msg(msg);
+		}
 	}
 
 	public override void OnInitializeMelon() =>
